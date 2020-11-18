@@ -1,0 +1,11 @@
+{
+  "name": "gitlog1",
+  "version": "0.0.1",
+  "description": "adds a file with git log -1 results to build output",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RoyAshbrook",
+  "license": "ISC"
+}
