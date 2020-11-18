@@ -13,3 +13,4 @@ module.exports = {
         exec(c,()=>console.log(`\n\ngitlog1 ran:\n\n\t${c}\n\n`))
     }
 }
+//module.exports = {generateBundle(){require('child_process').exec("git log -1 --pretty=format:%H%n%ae%n%ad > .\\public\\build\\commit.txt")}}
