@@ -1,20 +1,5 @@
 ## gitlog1
 
-A very simple [rollup](https://rollupjs.org/) plugin that, at build end, runs `git log -1` and writes the
-result to `public/build/commit.txt` , the commit hash, author email, and author date, one per line. Handy
-for stamping a build with the commit it came from.
+This is a very simple rollup plugin that runs git log -1 and outputs the results to a file in the build folder. Check the source for the actual command run. it will simply pass the command specified to the default shell for execution so YMMV. I wrote this for windows so it uses cmd.exe. YMMV, caveat emptor, use at your own risk, etc etc.
 
-Cross-platform (windows, mac, linux): it uses node's `fs` + `git` directly, no shell. If `git` isn't
-available or the directory can't be written, it logs and skips rather than failing your build.
-
-```js
-// rollup.config.js
-import gitlog1 from 'gitlog1';
-
-export default {
-  // ...
-  plugins: [gitlog1],
-};
-```
-
-Output goes to `public/build/commit.txt` (created if needed). Source is one small file , read it.
+**update (v0.0.2):** added mac/linux support. it now runs git and writes the file via node directly (no shell), so it works cross-platform. same output (`public/build/commit.txt`) and same usage, so the cmd.exe bit above is history now. =)

@@ -1,9 +1,9 @@
 name: release
 
-# publish gitlog1 to npm on a v* tag via Trusted Publishing (OIDC), no stored token.
+# on a v* tag: run the test on windows + mac + linux, and ONLY publish if all three pass , so a broken
+# (or non-cross-platform) change never ships. publish via npm Trusted Publishing (OIDC), no stored token;
 # requires the trusted publisher for `gitlog1` configured on npmjs.com (this repo + this workflow file).
-# no test suite (tiny rollup plugin). published version = package.json's version, so bump it then tag the
-# matching v<version> (0.0.1 is already on npm, so the next release needs a bump first).
+# published version = package.json's version, so bump it then tag the matching v<version>.
 on:
   push:
     tags: ["v*"]
@@ -13,7 +13,21 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm test
+
   publish:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

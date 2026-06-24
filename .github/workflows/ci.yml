@@ -1,0 +1,17 @@
+name: ci
+
+# run the test on push to main (ubuntu, cheap). the full windows/mac/linux matrix runs at release time
+# (release.yml), gating the publish , so a broken cross-platform change never ships.
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm test
