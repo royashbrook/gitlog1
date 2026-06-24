@@ -1,16 +1,22 @@
+const { execFile } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+
+// rollup plugin: at build end, write the last commit (hash / author email / author date) to
+// public/build/commit.txt. cross-platform , no shell, so the same thing works on windows, mac, linux.
+// (output file + location + format are unchanged from the original windows-only version.)
 module.exports = {
-    name: 'gitlog1',
-    buildEnd() {
-        //git command to run
-        const g = "git log -1 --pretty=format:%H%n%ae%n%ad";
-        //where to pipe it to
-        const o = ".\\public\\build\\commit.txt";
-        //cmd to run g, pipe to o
-        const c = `${g} > ${o}`
-        //child process ref
-        const { exec } = require('child_process');
-        //exec c and show status
-        exec(c,()=>console.log(`\n\ngitlog1 ran:\n\n\t${c}\n\n`))
-    }
-}
-//module.exports = {generateBundle(){require('child_process').exec("git log -1 --pretty=format:%H%n%ae%n%ad > .\\public\\build\\commit.txt")}}
+  name: 'gitlog1',
+  buildEnd() {
+    execFile('git', ['log', '-1', '--pretty=format:%H%n%ae%n%ad'], (err, stdout) => {
+      if (err) {
+        console.log(`\ngitlog1: git log failed (${err.message.trim()}), skipping commit.txt\n`);
+        return;
+      }
+      const out = path.join('public', 'build', 'commit.txt');
+      fs.mkdirSync(path.dirname(out), { recursive: true });
+      fs.writeFileSync(out, stdout);
+      console.log(`\ngitlog1 wrote ${out}\n`);
+    });
+  },
+};
