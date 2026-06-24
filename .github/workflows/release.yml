@@ -1,0 +1,27 @@
+name: release
+
+# publish gitlog1 to npm on a v* tag via Trusted Publishing (OIDC), no stored token.
+# requires the trusted publisher for `gitlog1` configured on npmjs.com (this repo + this workflow file).
+# no test suite (tiny rollup plugin). published version = package.json's version, so bump it then tag the
+# matching v<version> (0.0.1 is already on npm, so the next release needs a bump first).
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: npm >= 11.5.1 (trusted publishing / OIDC)
+        run: npm install -g npm@latest
+      - name: publish (via OIDC)
+        run: npm publish --access public

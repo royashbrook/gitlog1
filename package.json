@@ -8,5 +8,7 @@
   },
   "author": "Roy Ashbrook",
   "license": "ISC",
+  "repository": { "type": "git", "url": "git+https://github.com/royashbrook/gitlog1.git" },
+  "keywords": ["rollup-plugin", "git", "commit", "build"],
   "homepage": "https://github.com/royashbrook/gitlog1"
 }
